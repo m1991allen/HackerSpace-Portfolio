@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 明日設計所 — 形象暨作品集網站
 
-## Getting Started
+以 Next.js 16（App Router）+ TypeScript + Tailwind CSS v4 建置的接案工作室形象網站。
+全站靜態產生（SSG），可直接部署到 Vercel、Netlify、Cloudflare Pages 等平台。
 
-First, run the development server:
+## 快速開始
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev     # 開發模式 → http://localhost:3000
+npm run build   # 產生正式版
+npm run start   # 以正式版啟動
+npm run lint    # 程式碼檢查
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Node.js 安裝在 `~/.local/node`，並已加入 `~/.zshrc` 的 PATH。
+> 開新的終端機就能直接用 `node` / `npm`；若當前視窗還沒生效，執行 `source ~/.zshrc`。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 頁面結構
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 網址 | 內容 |
+| --- | --- |
+| `/` | 首頁：Hero、數據、精選作品、服務項目、關於與合作流程、CTA |
+| `/work` | 作品列表，含分類篩選 |
+| `/work/[slug]` | 專案內頁：主視覺、專案資訊、成效數據、專案故事＋圖片、客戶回饋、下一個作品 |
+| `/contact` | 聯絡管道（LINE／Email／電話）、需求表單、公司地址與營業時間 |
 
-## Learn More
+## 要改內容，只需要動這兩個檔案
 
-To learn more about Next.js, take a look at the following resources:
+### `src/data/site.ts` — 公司資料與聯絡資訊
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**⚠️ 目前的 LINE ID、Email、電話、地址全部是示範用假資料，上線前務必替換。**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```ts
+export const contact = {
+  lineId: "@mingri-studio",              // ← 換成你的 LINE 官方帳號 ID
+  lineUrl: "https://line.me/R/ti/p/...", // ← 換成加好友連結
+  email: "hello@mingri.studio",
+  phone: "02-2718-0000",
+  phoneHref: "tel:+886227180000",        // ← 記得同步改
+  address: { ... },                      // ← 公司地址
+  hours: [ ... ],                        // ← 營業時間
+};
+```
 
-## Deploy on Vercel
+同一個檔案還可以改：工作室名稱、標語、導覽選單、服務項目、數據、合作流程。
+改完之後全站（含頁尾）會自動同步，不需要動任何頁面。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `src/data/projects.ts` — 作品集
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+新增一個作品 = 在 `projects` 陣列加一個物件，首頁、作品列表與內頁網址 `/work/{slug}` 都會自動產生。
+
+```ts
+{
+  slug: "your-project",       // 網址用，只能英數與連字號
+  title: "專案名稱",
+  subtitle: "副標",
+  client: "客戶名稱",
+  category: "品牌官網",        // 分類篩選會自動收錄新分類
+  year: "2025",
+  accent: "#1D5343",          // 專案主色，用於標籤、數據與內頁光暈
+  excerpt: "一句話簡介",
+  cover: "/projects/xxx.jpg", // 封面圖
+  services: [...], stack: [...],
+  results: [{ value: "3.4×", label: "表單成長" }],   // 內頁成效數據（建議 3 個）
+  story: [{ label: "背景", title: "...", body: ["段落一", "段落二"] }],
+  testimonial: { quote: "...", author: "...", role: "..." },  // 選填
+  gallery: [{ src: "...", alt: "...", caption: "...", wide: true }],
+  featured: true,             // 是否出現在首頁精選（建議維持 4 個）
+}
+```
+
+**故事與圖片的搭配方式：** 內頁會在 `story` 的每一段之後，依序穿插一張 `gallery` 的圖。
+`gallery[0]` 預設就是封面，會被用作頂部主視覺、不會重複出現在故事之間。
+所以若有 4 段故事，建議準備 1 張封面 + 3～4 張內頁圖。
+
+## 替換作品圖片
+
+`public/projects/` 目前放的是 24 張 **SVG 示意圖**（抽象的網頁 mockup），
+用來在還沒有真實截圖時撐起版面。
+
+換成真實截圖時：
+
+1. 把圖片（`.jpg` / `.png` / `.webp`）放進 `public/projects/`
+2. 在 `src/data/projects.ts` 把 `cover` 與 `gallery[].src` 改成新檔名
+3. 建議尺寸：**1600×1000（16:10）**，與示意圖一致，換上去不會跑版
+
+首頁大卡為 16:10、列表卡為 4:3，都會自動裁切置中，不需要另外準備多種尺寸。
+
+## 待辦：表單串接
+
+`/contact` 的需求表單目前是**前端示範**，送出後只會顯示成功訊息，不會真的寄信。
+要實際收信，請修改 `src/components/contact-form.tsx` 的 `handleSubmit`，
+改成 POST 到 API route，或串接 Formspree／Resend／EmailJS 等服務。
+
+`/contact` 的地圖也是佔位用的向量示意圖，可改成 Google Maps 的 iframe 嵌入地圖。
+
+## 設計系統
+
+顏色與字體都定義在 `src/app/globals.css` 的 `@theme` 區塊，改一處全站生效：
+
+- `--color-paper` 暖白底、`--color-ink` 墨黑字、`--color-accent` 磚橘重點色
+- 標題使用 Noto Serif TC（`.display`），內文使用 Noto Sans TC
+- `.shell` 為統一的容器寬度、`.eyebrow` 為小標籤、`.link-underline` 為底線動畫連結
+- `<Reveal>` 元件負責捲動進場動畫，並支援「減少動態效果」的系統設定
+
+## 部署
+
+推到 GitHub 後接上 Vercel 即可，不需要任何環境變數。
+或直接執行 `npm run build && npm run start` 自行架站。
