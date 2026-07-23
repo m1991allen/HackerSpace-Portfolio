@@ -21,14 +21,14 @@ export const contact = {
   phone: "02-2718-0000",
   phoneHref: "tel:+886227180000",
   address: {
-    full: "104 台北市中山區南京東路三段 219 號 8 樓",
-    short: "台北市中山區南京東路三段 219 號 8 樓",
-    zip: "104",
-    city: "台北市",
-    district: "中山區",
-    street: "南京東路三段 219 號 8 樓",
+    full: "103臺北市大同區建泰里太原路133巷26號",
+    short: "臺北市大同區建泰里太原路133巷26號",
+    zip: "103",
+    city: "臺北市",
+    district: "大同區",
+    street: "太原路133巷26號",
     mapUrl:
-      "https://www.google.com/maps/search/?api=1&query=台北市中山區南京東路三段219號",
+      "https://www.google.com/maps/search/?api=1&query=103臺北市大同區建泰里太原路133巷26號",
   },
   hours: [
     { day: "週一 – 週五", time: "10:00 – 19:00" },
