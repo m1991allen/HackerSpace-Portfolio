@@ -12,8 +12,7 @@ npm run start   # 以正式版啟動
 npm run lint    # 程式碼檢查
 ```
 
-> Node.js 安裝在 `~/.local/node`，並已加入 `~/.zshrc` 的 PATH。
-> 開新的終端機就能直接用 `node` / `npm`；若當前視窗還沒生效，執行 `source ~/.zshrc`。
+> 需要 Node.js 20 以上（建議 22 LTS）。
 
 ## 頁面結構
 
