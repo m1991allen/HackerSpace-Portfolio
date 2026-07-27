@@ -1,10 +1,14 @@
 import Link from "next/link";
 import Reveal from "@/components/reveal";
 import ProjectCard from "@/components/project-card";
-import { featuredProjects } from "@/data/projects";
+import { getFeaturedProjects } from "@/lib/projects";
 import { process, services, site, stats } from "@/data/site";
 
-export default function Home() {
+// 每 5 分鐘重新產生一次；後台編輯後也會即時更新（見 revalidatePath）
+export const revalidate = 300;
+
+export default async function Home() {
+  const featuredProjects = await getFeaturedProjects();
   return (
     <>
       {/* ── Hero ───────────────────────────────── */}

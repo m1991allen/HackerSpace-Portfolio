@@ -1,7 +1,10 @@
 # 明日設計所 — 形象暨作品集網站
 
 以 Next.js 16（App Router）+ TypeScript + Tailwind CSS v4 建置的接案工作室形象網站。
-全站靜態產生（SSG），可直接部署到 Vercel、Netlify、Cloudflare Pages 等平台。
+公開頁面採 ISR（靜態＋自動更新），作品內容與聯絡訊息透過 Firebase 後台管理。
+
+> 🛠 **想啟用後台（編輯作品）與聯絡表單收訊息？** 請看 **[SETUP.md](./SETUP.md)** 的一步步教學。
+> 在完成設定前，網站仍可正常運作，作品會顯示 `src/data/projects.ts` 的預設資料。
 
 ## 快速開始
 
@@ -85,13 +88,20 @@ export const contact = {
 
 首頁大卡為 16:10、列表卡為 4:3，都會自動裁切置中，不需要另外準備多種尺寸。
 
-## 待辦：表單串接
+## 後台與聯絡表單
 
-`/contact` 的需求表單目前是**前端示範**，送出後只會顯示成功訊息，不會真的寄信。
-要實際收信，請修改 `src/components/contact-form.tsx` 的 `handleSubmit`，
-改成 POST 到 API route，或串接 Formspree／Resend／EmailJS 等服務。
+作品現在可以在 `/admin` 後台直接編輯（新增／修改／刪除、上傳圖片），
+聯絡表單送出後會存進後台收件匣 `/admin/messages`，並可選擇性 Email 通知。
+完整設定步驟見 **[SETUP.md](./SETUP.md)**。
 
-`/contact` 的地圖也是佔位用的向量示意圖，可改成 Google Maps 的 iframe 嵌入地圖。
+- 資料層：`src/lib/`（`firebase-admin.ts`、`projects.ts`、`messages.ts`、`auth.ts`）
+- 後台頁面：`src/app/admin/`
+- API：`src/app/api/`（`contact`、`auth/session`、`admin/upload`）
+- 一次性匯入既有作品：`npm run seed`
+
+> `src/data/projects.ts` 仍保留，作為預設資料與匯入來源；設定 Firebase 前網站會顯示它。
+
+`/contact` 的地圖仍是佔位用的向量示意圖，可改成 Google Maps 的 iframe 嵌入地圖。
 
 ## 設計系統
 

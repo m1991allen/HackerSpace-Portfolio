@@ -3,11 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/reveal";
-import { getProject, projects } from "@/data/projects";
+import { getAllProjects, getProjectBySlug } from "@/lib/projects";
+
+export const revalidate = 300;
 
 type Params = { slug: string };
 
-export function generateStaticParams(): Params[] {
+export async function generateStaticParams(): Promise<Params[]> {
+  const projects = await getAllProjects();
   return projects.map((p) => ({ slug: p.slug }));
 }
 
@@ -17,7 +20,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return { title: "找不到作品" };
 
   return {
@@ -37,9 +40,10 @@ export default async function ProjectPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
+  const projects = await getAllProjects();
   const index = projects.findIndex((p) => p.slug === slug);
   const next = projects[(index + 1) % projects.length]!;
 

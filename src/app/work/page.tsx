@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/reveal";
 import WorkGrid from "@/components/work-grid";
-import { categories, projects } from "@/data/projects";
+import { getAllProjects, getCategories } from "@/lib/projects";
 
 export const metadata: Metadata = {
   title: "作品",
@@ -9,7 +9,13 @@ export const metadata: Metadata = {
     "品牌官網、電子商務與網頁系統的完整作品集，每個專案都附有設計思考與成果數據。",
 };
 
-export default function WorkPage() {
+export const revalidate = 300;
+
+export default async function WorkPage() {
+  const [projects, categories] = await Promise.all([
+    getAllProjects(),
+    getCategories(),
+  ]);
   return (
     <>
       <section className="shell pt-16 pb-14 sm:pt-24">

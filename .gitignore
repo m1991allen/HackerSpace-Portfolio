@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# 但保留範本檔，方便新環境設定
+!.env.local.example
 
 # vercel
 .vercel

@@ -8,18 +8,48 @@ const types = ["品牌官網", "電子商務", "網頁系統", "改版優化", "
 /**
  * 需求表單。
  *
- * ⚠️ 目前為前端示範：送出後只顯示成功訊息，並未真的寄出。
- * 要實際收信，可在 handleSubmit 裡改成 POST 到 /api/contact，
- * 或串接 Formspree / Resend / EmailJS 等服務。
+ * 送出後會 POST 到 /api/contact：訊息存進後台收件匣，
+ * 並（若有設定 Resend）寄一封通知信到管理者信箱。
  */
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const [budget, setBudget] = useState<string>("");
   const [type, setType] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setError(null);
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get("name"),
+      company: fd.get("company"),
+      email: fd.get("email"),
+      phone: fd.get("phone"),
+      message: fd.get("message"),
+      _gotcha: fd.get("_gotcha"),
+      type,
+      budget,
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? "送出失敗，請稍後再試");
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "送出失敗，請稍後再試");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (sent) {
@@ -39,9 +69,6 @@ export default function ContactForm() {
         >
           再填一份
         </button>
-        <p className="mt-6 text-xs text-muted">
-          （示範用：表單尚未串接寄信服務）
-        </p>
       </div>
     );
   }
@@ -103,12 +130,27 @@ export default function ContactForm() {
         />
       </div>
 
+      {/* 蜜罐欄位：隱藏，正常使用者不會填，用來擋機器人 */}
+      <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+        <label>
+          請勿填寫
+          <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
+
+      {error && (
+        <p className="rounded-xl border border-accent/40 bg-accent-soft px-4 py-3 text-sm text-accent">
+          {error}
+        </p>
+      )}
+
       <div className="flex flex-wrap items-center gap-5">
         <button
           type="submit"
-          className="rounded-full bg-ink px-8 py-4 text-sm text-paper transition-colors hover:bg-accent"
+          disabled={loading}
+          className="rounded-full bg-ink px-8 py-4 text-sm text-paper transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          送出需求
+          {loading ? "送出中…" : "送出需求"}
         </button>
         <p className="text-xs text-muted">
           我們不會把你的資料用於行銷或提供給第三方。

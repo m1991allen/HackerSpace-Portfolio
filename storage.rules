@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// 圖片一律由伺服器端 Admin SDK 上傳，並以帶下載 token 的網址公開讀取
+// （token 網址會略過這些規則）。因此前端一律拒絕存取。
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

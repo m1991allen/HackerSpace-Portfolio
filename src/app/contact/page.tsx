@@ -177,7 +177,11 @@ export default function ContactPage() {
           <code className="rounded bg-paper-2 px-1.5 py-0.5 text-xs text-ink">
             src/data/site.ts
           </code>{" "}
-          修改為真實資訊。表單目前為前端示範，尚未串接寄信服務。
+          修改為真實資訊。需求表單送出後會存進後台收件匣（
+          <code className="rounded bg-paper-2 px-1.5 py-0.5 text-xs text-ink">
+            /admin/messages
+          </code>
+          ），完成 Firebase 設定後即生效。
         </div>
       </section>
     </>
