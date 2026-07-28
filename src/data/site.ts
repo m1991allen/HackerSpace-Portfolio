@@ -9,7 +9,9 @@ export const site = {
   tagline: "把品牌的價值，變成看得見的網站。",
   description:
     "明日設計所是一間專注於品牌官網、電商與網頁系統的數位設計工作室。我們從商業目標出發，用設計與技術替品牌做出真正會轉換的網站。",
-  url: "https://example.com",
+  // 網站正式網址。用於 metadataBase、sitemap 與 robots，
+  // 之後掛上自訂網域時改這一行即可。
+  url: "https://hackerspace-portfolio-promise.vercel.app",
   foundedYear: 2016,
 } as const;
 

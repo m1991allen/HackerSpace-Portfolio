@@ -10,6 +10,7 @@
     "seed": "node --env-file=.env.local --import tsx scripts/seed-firestore.ts"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.12",
     "@vercel/blob": "^2.6.1",
     "firebase": "^12.16.0",
     "firebase-admin": "^14.2.0",
