@@ -3,10 +3,14 @@ import Reveal from "@/components/reveal";
 import WorkGrid from "@/components/work-grid";
 import { getAllProjects, getCategories } from "@/lib/projects";
 
+const description =
+  "品牌官網、電子商務與網頁系統的完整作品集，每個專案都附有設計思考與成果數據。";
+
 export const metadata: Metadata = {
   title: "作品",
-  description:
-    "品牌官網、電子商務與網頁系統的完整作品集，每個專案都附有設計思考與成果數據。",
+  description,
+  alternates: { canonical: "/work" },
+  openGraph: { title: "作品", description, url: "/work" },
 };
 
 export const revalidate = 300;

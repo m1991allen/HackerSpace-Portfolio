@@ -20,19 +20,50 @@ const notoSerif = Noto_Serif_TC({
   display: "swap",
 });
 
+const title = `${site.name}｜${site.tagline}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name}｜${site.tagline}`,
+    default: title,
     template: `%s｜${site.name}`,
   },
   description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.name }],
+  creator: site.name,
+  keywords: [
+    site.name,
+    site.nameEn,
+    "網頁設計",
+    "品牌官網",
+    "形象網站",
+    "電商網站",
+    "網頁系統開發",
+    "UI 設計",
+    "RWD 響應式",
+    "SEO",
+  ],
+  // 首頁的 canonical。其餘頁面各自在 page.tsx 覆寫，
+  // 否則會繼承這裡的 "/"，導致所有頁面都自稱是首頁。
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
   openGraph: {
-    title: `${site.name}｜${site.tagline}`,
+    title,
     description: site.description,
+    url: site.url,
     type: "website",
     locale: "zh_TW",
     siteName: site.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: site.description,
   },
 };
 

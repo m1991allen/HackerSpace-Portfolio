@@ -3,9 +3,13 @@ import Reveal from "@/components/reveal";
 import ContactForm from "@/components/contact-form";
 import { contact, site } from "@/data/site";
 
+const description = `透過 LINE、Email 或電話與${site.name}聯繫，或直接來${contact.address.city}${contact.address.district}的辦公室聊聊。`;
+
 export const metadata: Metadata = {
   title: "聯絡我們",
-  description: `透過 LINE、Email 或電話與${site.name}聯繫，或直接來${contact.address.city}${contact.address.district}的辦公室聊聊。`,
+  description,
+  alternates: { canonical: "/contact" },
+  openGraph: { title: "聯絡我們", description, url: "/contact" },
 };
 
 const channels = [
