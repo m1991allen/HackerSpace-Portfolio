@@ -9,7 +9,7 @@ const types = ["品牌官網", "電子商務", "網頁系統", "改版優化", "
  * 需求表單。
  *
  * 送出後會 POST 到 /api/contact：訊息存進後台收件匣，
- * 並（若有設定 Resend）寄一封通知信到管理者信箱。
+ * 並（若有設定寄信帳號）寄通知信給收件名單上的人。
  */
 export default function ContactForm() {
   const [sent, setSent] = useState(false);

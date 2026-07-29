@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // 讓 firebase-admin 用 Node 原生載入，避免打包器把相依的 jose 解析成 ESM
   // 而在 Vercel 上出現 ERR_REQUIRE_ESM。
-  serverExternalPackages: ["firebase-admin"],
+  // nodemailer 內部有動態 require，也交給 Node 原生載入比較保險。
+  serverExternalPackages: ["firebase-admin", "nodemailer"],
   images: {
     // 允許 next/image 載入上傳的圖片
     remotePatterns: [
