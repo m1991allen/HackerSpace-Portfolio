@@ -116,3 +116,8 @@ export const contact = {
 
 推到 GitHub 後接上 Vercel 即可，不需要任何環境變數。
 或直接執行 `npm run build && npm run start` 自行架站。
+
+
+## todo
+
+目前頁面上的 LINE ID、Email、電話與地址皆為示範用假資料，請至 src/data/site.ts 修改為真實資訊。需求表單送出後會存進後台收件匣（/admin/messages），完成 Firebase 設定後即生效。

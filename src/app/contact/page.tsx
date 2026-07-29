@@ -172,22 +172,6 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
-
-      {/* ── 假資料提醒 ─────────────────────────── */}
-      <section className="shell pb-8">
-        <div className="rounded-2xl border border-dashed border-line px-6 py-5 text-sm leading-relaxed text-muted">
-          <strong className="text-ink">給網站管理者：</strong>{" "}
-          目前頁面上的 LINE ID、Email、電話與地址皆為示範用假資料，請至{" "}
-          <code className="rounded bg-paper-2 px-1.5 py-0.5 text-xs text-ink">
-            src/data/site.ts
-          </code>{" "}
-          修改為真實資訊。需求表單送出後會存進後台收件匣（
-          <code className="rounded bg-paper-2 px-1.5 py-0.5 text-xs text-ink">
-            /admin/messages
-          </code>
-          ），完成 Firebase 設定後即生效。
-        </div>
-      </section>
     </>
   );
 }
